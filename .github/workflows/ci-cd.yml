@@ -33,11 +33,15 @@ jobs:
       - name: Run tests
         run: mvn test
 
-      - name: Build Docker image
-        run: docker build . -t myusername/tradestore:latest
+      - name: Install Trivy
+        run: |
+          sudo apt-get install wget -y
+          wget https://github.com/aquasecurity/trivy/releases/download/v0.37.3/trivy_0.37.3_Linux-64bit.deb
+          sudo dpkg -i trivy_0.37.3_Linux-64bit.deb
 
-      - name: Login to DockerHub
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+      - name: Security scan
+        run: trivy fs --exit-code 1 --severity CRITICAL,HIGH .
 
-      - name: Push Docker image
-        run: docker push myusername/tradestore:latest
+      - name: Fail on vulnerability
+        if: failure()
+        run: exit 1
