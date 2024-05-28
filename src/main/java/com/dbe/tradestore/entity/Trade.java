@@ -11,6 +11,12 @@ public class Trade {
     private String tradeId;
     private int version;
     private String counterPartyId;
+    private String bookId;
+    private Date maturityDate;
+    private Date createdDate;
+    private boolean expired;
+
+    // Constructors, getters, and setters
 
     public String getTradeId() {
         return tradeId;
@@ -68,11 +74,5 @@ public class Trade {
         this.expired = expired;
     }
 
-    private String bookId;
-    private Date maturityDate;
-    private Date createdDate;
-    private boolean expired;
-
-    // Constructors, getters, and setters
 
 }
